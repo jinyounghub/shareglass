@@ -32,7 +32,19 @@ git tag -a v1.0.0 -m "ShareGlass v1.0.0"
 git push origin v1.0.0
 ```
 
-The release workflow runs the full test/build pipeline and attaches both the npm tarball and complete source archive. Publishing to npm is intentionally gated behind the repository variable `PUBLISH_NPM=true` and the `NPM_TOKEN` secret.
+The release workflow runs the full test/build pipeline and attaches both the npm tarball and complete source archive. Publishing to npm is intentionally gated behind the repository variable `PUBLISH_NPM=true`.
+
+The first package version was published directly with 2FA after its release tarball was verified. Once the package existed, its npm Trusted Publisher was connected to `jinyounghub/shareglass` and `.github/workflows/release.yml`:
+
+```bash
+npm trust github @jin0/shareglass \
+  --repo jinyounghub/shareglass \
+  --file release.yml \
+  --allow-publish \
+  --yes
+```
+
+Future tagged releases publish through GitHub Actions OIDC. The workflow requests `id-token: write`, runs on GitHub-hosted `ubuntu-latest` with Node.js 24 and a current npm CLI, and does not use a long-lived npm publish token. Trusted Publishing adds provenance automatically. Set `PUBLISH_NPM=true` only after `npm trust list @jin0/shareglass --json` confirms the repository and workflow mapping.
 
 ## Announcement angle
 

@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-          cache: npm
+          package-manager-cache: false
+      - name: Use a trusted-publishing-capable npm CLI
+        run: npm install --global npm@latest
       - run: npm ci
       - name: Verify tag and package version
         run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
@@ -39,6 +41,4 @@ jobs:
             --title "ShareGlass $GITHUB_REF_NAME"
       - name: Publish npm package
         if: ${{ vars.PUBLISH_NPM == 'true' }}
-        run: npm publish release/jin0-shareglass-*.tgz --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish release/jin0-shareglass-*.tgz --access public
