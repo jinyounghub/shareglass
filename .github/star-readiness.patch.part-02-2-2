@@ -1,0 +1,21 @@
+);
++}
+ 
+ const localHtmlReferences = [...html.matchAll(/\b(?:href|src)="([^"]+)"/g)]
+   .map((match) => match[1])
+diff --git a/src/app.js b/src/app.js
+index 54a06c0..94a458c 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -4,6 +4,7 @@ import { categorySummary, reportToJson, reportToMarkdown } from './core/report.j
+ import { escapeHtml, formatBytes, mimeFromExtension, safeFilename } from './core/utils.js';
+ 
+ const $ = (selector) => document.querySelector(selector);
++const PROJECT_URL = 'https://github.com/jinyounghub/shareglass';
+ const elements = {
+   dropView: $('#drop-view'),
+   loadingView: $('#loading-view'),
+@@ -336,7 +337,10 @@ async function createSafeCopy() {
+     elements.safeResult.innerHTML = `
+       <strong>Safer copy created and scanned again</strong>
+       <p>${result.verifica

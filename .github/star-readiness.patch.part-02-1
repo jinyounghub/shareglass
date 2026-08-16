@@ -1,0 +1,36 @@
+pect the DOCX first, choose the supported author, comment, thumbnail, custom-data, or external-link actions, then create a separate safe copy. ShareGlass scans that copy again and never overwrites the original.</p></div>
++        </details>
++        <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
++          <summary itemprop="name">Can a photo reveal where it was taken?</summary>
++          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text">Yes. JPEG, PNG, and WebP files can contain EXIF or XMP location and device data. ShareGlass identifies supported GPS metadata locally and can create a metadata-cleaned derivative.</p></div>
++        </details>
++        <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
++          <summary itemprop="name">Does ShareGlass upload my document or photo?</summary>
++          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text">No. Inspection and supported safe-copy operations run in the current browser tab. There is no file-upload endpoint, account system, analytics script, or telemetry.</p></div>
++        </details>
++        <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
++          <summary itemprop="name">Does a clean report prove a file is safe?</summary>
++          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text">No. ShareGlass reports the structures it knows how to inspect. It is not an antivirus scanner and does not promise anonymity, harmlessness, or complete metadata removal for every file format.</p></div>
++        </details>
++      </div>
++    </section>
+   </main>
+ 
+   <footer>
+     <div class="brand"><img src="assets/shareglass-mark.svg" alt="" width="28" height="28"><span>ShareGlass</span></div>
+     <p>Open source · MIT licensed · No telemetry · Built for files you are about to send.</p>
+-    <a href="https://github.com/jinyounghub/shareglass" rel="noreferrer">View source ↗</a>
++    <a href="https://github.com/jinyounghub/shareglass" target="_blank" rel="noopener noreferrer">★ Star ShareGlass ↗</a>
+   </footer>
+ 
++  <noscript><p class="noscript">ShareGlass needs JavaScript to inspect files locally. No file is uploaded.</p></noscript>
+   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+   <canvas id="share-canvas" width="1200" height="630" hidden></canvas>
+   <script type="module" src="src/app.js"></script>
+diff --git a/scripts/build.mjs b/scripts/build.mjs
+index a29ae48..825ab40 100644
+--- a/scripts/build.mjs
++++ b/scripts/build.mjs
+@@ -8,7 +8,7 @@ const dist = resolve(root, 'dist');
+ await rm(dist, { recursive: true, force: true });
+ awai

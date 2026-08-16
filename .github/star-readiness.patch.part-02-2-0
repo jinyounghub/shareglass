@@ -1,0 +1,17 @@
+t mkdir(dist, { recursive: true });
+ 
+-for (const path of ['index.html', 'app.css', 'manifest.webmanifest', 'sw.js', 'assets', 'src', 'samples']) {
++for (const path of ['index.html', 'app.css', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', 'sw.js', 'assets', 'src', 'samples']) {
+   await cp(resolve(root, path), resolve(dist, path), { recursive: true });
+ }
+ 
+diff --git a/scripts/check.mjs b/scripts/check.mjs
+index 917a3dd..aa873ff 100644
+--- a/scripts/check.mjs
++++ b/scripts/check.mjs
+@@ -6,7 +6,7 @@ import { SHAREGLASS_VERSION } from '../src/core/analyze.js';
+ 
+ const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
+ const required = [
+-  'index.html', 'app.css', 'manifest.webmanifest', 'sw.js', 'README.md', 'LICENSE',
++  'index.html', 'app.css', 'manifest.webmanifest
