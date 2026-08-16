@@ -205,9 +205,9 @@ export async function openZip(input, options = {}) {
 }
 
 function dosDateTime(date = new Date()) {
-  const year = Math.max(1980, Math.min(2107, date.getFullYear()));
-  const time = (date.getHours() << 11) | (date.getMinutes() << 5) | Math.floor(date.getSeconds() / 2);
-  const day = ((year - 1980) << 9) | ((date.getMonth() + 1) << 5) | date.getDate();
+  const year = Math.max(1980, Math.min(2107, date.getUTCFullYear()));
+  const time = (date.getUTCHours() << 11) | (date.getUTCMinutes() << 5) | Math.floor(date.getUTCSeconds() / 2);
+  const day = ((year - 1980) << 9) | ((date.getUTCMonth() + 1) << 5) | date.getUTCDate();
   return { time, date: day };
 }
 

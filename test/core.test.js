@@ -125,6 +125,16 @@ test('ZIP writer and reader round-trip without dependencies', async () => {
   assert.equal(textDecode(await zip.read('nested/value.txt')), 'value');
 });
 
+test('ZIP writer encodes timestamps independently of the local timezone', () => {
+  const bytes = createZip(
+    [{ name: 'hello.txt', data: textEncode('hello') }],
+    { date: new Date('2026-01-01T00:00:00Z') }
+  );
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  assert.equal(view.getUint16(10, true), 0);
+  assert.equal(view.getUint16(12, true), ((2026 - 1980) << 9) | (1 << 5) | 1);
+});
+
 test('ZIP writer rejects duplicate and traversal paths', () => {
   assert.throws(() => createZip([
     { name: 'duplicate.txt', data: textEncode('one') },
