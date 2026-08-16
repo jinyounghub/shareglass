@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If ShareGlass helps your work, please cite the software using this metadata."
+title: "ShareGlass"
+type: software
+authors:
+  - name: "jinyounghub"
+repository-code: "https://github.com/jinyounghub/shareglass"
+url: "https://jinyounghub.github.io/shareglass/"
+license: MIT
+version: 1.0.0
+date-released: 2026-08-16
+abstract: "A local-first privacy and provenance inspector for Office documents, PDFs, and images."
+keywords:
+  - privacy
+  - metadata
+  - EXIF
+  - Office Open XML
+  - PDF
+  - C2PA

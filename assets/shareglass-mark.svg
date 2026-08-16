@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">ShareGlass</title>
+  <defs>
+    <linearGradient id="g" x1="18" y1="12" x2="110" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#77f5d0"/>
+      <stop offset=".54" stop-color="#42c7e9"/>
+      <stop offset="1" stop-color="#6d7cff"/>
+    </linearGradient>
+  </defs>
+  <path d="M64 7 109 24v33c0 28-16.8 50.5-45 64C35.8 107.5 19 85 19 57V24L64 7Z" fill="#0b1220" stroke="url(#g)" stroke-width="7"/>
+  <path d="M40 43h48M40 61h36M40 79h25" fill="none" stroke="url(#g)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="88" cy="80" r="17" fill="#0b1220" stroke="url(#g)" stroke-width="7"/>
+  <path d="m99.5 92.5 13 13" stroke="url(#g)" stroke-width="8" stroke-linecap="round"/>
+</svg>

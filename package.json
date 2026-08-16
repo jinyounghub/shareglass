@@ -1,0 +1,57 @@
+{
+  "name": "@jin0/shareglass",
+  "version": "1.0.0",
+  "description": "Local-first privacy and provenance inspector for Office documents, PDFs, and images.",
+  "type": "module",
+  "bin": {
+    "shareglass": "./bin/shareglass.mjs"
+  },
+  "exports": {
+    ".": "./src/core/analyze.js",
+    "./report": "./src/core/report.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "src/core",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "samples": "node scripts/make-samples.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "ci": "npm run check && npm test && npm run build",
+    "serve": "python3 -m http.server 4173"
+  },
+  "keywords": [
+    "privacy",
+    "metadata",
+    "exif",
+    "office",
+    "pdf",
+    "docx",
+    "c2pa",
+    "provenance",
+    "local-first",
+    "security"
+  ],
+  "author": "jinyounghub",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jinyounghub/shareglass.git"
+  },
+  "homepage": "https://jinyounghub.github.io/shareglass/",
+  "bugs": {
+    "url": "https://github.com/jinyounghub/shareglass/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ShareGlass reveals hidden personal data, external links, comments, active content, and provenance before you share a file. Everything runs locally in your browser.">
+  <meta name="theme-color" content="#08111f">
+  <meta name="color-scheme" content="dark light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta property="og:title" content="ShareGlass — See what your files reveal">
+  <meta property="og:description" content="A local-first privacy and provenance inspector for Office documents, PDFs, and images.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/social-card.png">
+  <link rel="icon" href="assets/shareglass-mark.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="app.css">
+  <title>ShareGlass — See what your files reveal</title>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="ShareGlass home">
+      <img src="assets/shareglass-mark.svg" alt="" width="34" height="34">
+      <span>ShareGlass</span>
+      <small>v1.0</small>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#how-it-works">How it works</a>
+      <a href="#support">Formats</a>
+      <a class="github-link" href="https://github.com/jinyounghub/shareglass" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="top">
+      <div class="eyebrow"><span class="pulse-dot"></span> Local-first file privacy</div>
+      <h1>See what your files reveal<br><span>before you share them.</span></h1>
+      <p class="hero-copy">Find hidden identities, exact GPS coordinates, comments, tracked revisions, external connections, active content, and provenance data. Your file stays in your browser.</p>
+      <div class="trust-row" aria-label="Privacy promises">
+        <span><strong>0</strong> uploads</span>
+        <span><strong>0</strong> accounts</span>
+        <span><strong>100%</strong> local analysis</span>
+      </div>
+    </section>
+
+    <section class="scanner-shell" aria-labelledby="scanner-title">
+      <div class="scanner-topline">
+        <div>
+          <span class="window-dot red"></span><span class="window-dot amber"></span><span class="window-dot green"></span>
+        </div>
+        <span id="scanner-title">shareglass://local-inspector</span>
+        <span class="local-badge"><span></span> LOCAL</span>
+      </div>
+
+      <div id="drop-view" class="drop-view">
+        <input id="file-input" type="file" accept=".jpg,.jpeg,.png,.webp,.pdf,.docx,.docm,.xlsx,.xlsm,.pptx,.pptm" multiple hidden>
+        <button id="drop-zone" class="drop-zone" type="button">
+          <span class="drop-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64"><path d="M32 42V15m0 0-10 10m10-10 10 10M13 40v7a5 5 0 0 0 5 5h28a5 5 0 0 0 5-5v-7"/></svg>
+          </span>
+          <strong>Drop a file to inspect</strong>
+          <span>or click to choose from your device</span>
+          <small>JPEG · PNG · WebP · PDF · DOCX · XLSX · PPTX · up to 300 MB</small>
+        </button>
+        <div class="sample-row">
+          <span>Nothing handy?</span>
+          <button class="sample-button" data-sample="private-resume.docx" type="button">Try a private résumé</button>
+          <button class="sample-button" data-sample="private-photo.png" type="button">Try a geotagged image</button>
+          <button class="sample-button" data-sample="risky-contract.pdf" type="button">Try an active PDF</button>
+        </div>
+        <div class="privacy-proof">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5.5c0 4.7 2.8 8.5 7.5 10.5 4.7-2 7.5-5.8 7.5-10.5V6L12 3Z"/><path d="m8.8 12.2 2.1 2.1 4.5-5"/></svg>
+          <div><strong>Your file never leaves this tab.</strong><span>Open DevTools → Network to verify. ShareGlass has no upload endpoint and no analytics.</span></div>
+        </div>
+      </div>
+
+      <div id="loading-view" class="loading-view" hidden>
+        <div class="scanner-animation" aria-hidden="true"><span></span><span></span><span></span></div>
+        <h2>Looking through the glass…</h2>
+        <p id="loading-label">Reading the file structure locally.</p>
+      </div>
+
+      <div id="report-view" class="report-view" hidden>
+        <div class="report-header">
+          <div class="file-identity">
+            <div id="file-preview" class="file-preview"></div>
+            <div>
+              <div class="file-kicker" id="file-type-label">Document</div>
+              <h2 id="file-name">file.docx</h2>
+              <p id="file-meta">0 KB · SHA-256 000000…</p>
+            </div>
+          </div>
+          <div class="risk-cluster">
+            <div id="risk-ring" class="risk-ring" style="--score: 0">
+              <div><strong id="risk-score">0</strong><span>/100</span></div>
+            </div>
+            <div><span>Share risk</span><strong id="risk-level">Clear</strong></div>
+          </div>
+        </div>
+
+        <div id="summary-strip" class="summary-strip"></div>
+
+        <div class="report-actions">
+          <button id="new-file" class="button secondary" type="button">Inspect another file</button>
+          <div class="action-spacer"></div>
+          <button id="export-json" class="button ghost" type="button">JSON report</button>
+          <button id="export-markdown" class="button ghost" type="button">Markdown</button>
+          <button id="share-card" class="button ghost" type="button">Share card</button>
+        </div>
+
+        <div class="report-grid">
+          <section class="panel findings-panel" aria-labelledby="findings-title">
+            <div class="panel-heading">
+              <div><span class="section-label">Inspection</span><h3 id="findings-title">What ShareGlass found</h3></div>
+              <div id="finding-filters" class="filters" role="group" aria-label="Filter findings"></div>
+            </div>
+            <div id="findings-list" class="findings-list"></div>
+          </section>
+
+          <aside class="side-stack">
+            <section id="safe-copy-panel" class="panel safe-copy-panel" aria-labelledby="safe-copy-title">
+              <span class="section-label">Remediation</span>
+              <h3 id="safe-copy-title">Create a safer copy</h3>
+              <p id="safe-copy-description">Choose what to remove. The original file is never changed.</p>
+              <div id="safe-actions" class="safe-actions"></div>
+              <label id="provenance-confirm" class="warning-check" hidden><input type="checkbox"><span>I understand this creates an unsigned derivative and may invalidate Content Credentials.</span></label>
+              <label id="signature-confirm" class="warning-check" hidden><input type="checkbox"><span>I understand that the original Office digital signature cannot survive modification.</span></label>
+              <button id="create-safe-copy" class="button primary full" type="button">Create & verify safe copy</button>
+              <div id="safe-result" class="safe-result" hidden></div>
+            </section>
+
+            <section id="provenance-panel" class="panel provenance-panel" aria-labelledby="provenance-title">
+              <div class="provenance-icon" aria-hidden="true">CC</div>
+              <div>
+                <span class="section-label">Provenance</span>
+                <h3 id="provenance-title">Content Credentials</h3>
+              </div>
+              <p id="provenance-copy">Request a cryptographic read with the official C2PA Web SDK. The SDK and WASM are loaded only after you click verify; your file remains local.</p>
+              <button id="verify-c2pa" class="button secondary full" type="button">Verify with official C2PA SDK</button>
+              <div id="c2pa-result" class="c2pa-result" hidden></div>
+            </section>
+
+            <details class="panel technical-panel">
+              <summary><span>Technical details</span><span aria-hidden="true">＋</span></summary>
+              <div id="technical-details"></div>
+            </details>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="info-section">
+      <div class="section-intro"><span class="eyebrow plain">How it works</span><h2>Inspect. Understand. Clean. Verify.</h2><p>ShareGlass does not send files to a server. Every detector and sanitizer runs in your browser or in the zero-dependency CLI.</p></div>
+      <div class="steps-grid">
+        <article><span>01</span><h3>Inspect the container</h3><p>Read image segments, PDF objects, and Office package parts—not just the filename or visible text.</p></article>
+        <article><span>02</span><h3>Explain the exposure</h3><p>Turn obscure metadata fields and relationships into plain-language risks with exact evidence.</p></article>
+        <article><span>03</span><h3>Create a copy</h3><p>Remove supported metadata without overwriting the original. Risky transformations are opt-in.</p></article>
+        <article><span>04</span><h3>Scan it again</h3><p>Re-run every detector and compare content fingerprints before offering the cleaned download.</p></article>
+      </div>
+    </section>
+
+    <section id="support" class="formats-section">
+      <div class="section-intro"><span class="eyebrow plain">Format support</span><h2>Useful today. Honest about limits.</h2></div>
+      <div class="format-table" role="table" aria-label="Supported formats">
+        <div class="format-row heading" role="row"><span>Format</span><span>Inspection</span><span>Safe copy</span><span>Highlights</span></div>
+        <div class="format-row" role="row"><strong>JPEG / PNG / WebP</strong><span class="yes">Full</span><span class="yes">Metadata</span><span>EXIF, GPS, XMP, IPTC, comments, C2PA markers</span></div>
+        <div class="format-row" role="row"><strong>DOCX</strong><span class="yes">Full</span><span class="yes">Selective</span><span>Authors, comments, revisions, custom XML, links, macros</span></div>
+        <div class="format-row" role="row"><strong>XLSX / PPTX</strong><span class="yes">Full</span><span class="partial">Metadata</span><span>Hidden content, external links, notes, objects, macros</span></div>
+        <div class="format-row" role="row"><strong>PDF</strong><span class="yes">Full</span><span class="inspect">Inspect only</span><span>Metadata, JavaScript, actions, attachments, forms, signatures</span></div>
+      </div>
+      <p class="limit-note">PDF rewriting is intentionally disabled in v1: preserving xref tables, signatures, forms, and rendered output safely requires a dedicated rewrite engine. ShareGlass reports the risk instead of pretending a byte replacement is safe.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand"><img src="assets/shareglass-mark.svg" alt="" width="28" height="28"><span>ShareGlass</span></div>
+    <p>Open source · MIT licensed · No telemetry · Built for files you are about to send.</p>
+    <a href="https://github.com/jinyounghub/shareglass" rel="noreferrer">View source ↗</a>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <canvas id="share-canvas" width="1200" height="630" hidden></canvas>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

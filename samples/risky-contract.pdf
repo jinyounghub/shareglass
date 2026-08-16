@@ -1,0 +1,60 @@
+%PDF-1.7
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R /OpenAction 6 0 R /Names << /EmbeddedFiles << /Names [(internal-notes.txt) 8 0 R] >> >> /AcroForm 10 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R /Annots [7 0 R] >>
+endobj
+4 0 obj
+<< /Length 198 >>
+stream
+BT /F1 24 Tf 72 720 Td (ShareGlass synthetic contract) Tj 0 -42 Td /F1 12 Tf (This file contains intentionally risky metadata and actions.) Tj 0 -30 Td (Click the blue link only in a sandbox.) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /S /JavaScript /JS (app.alert\('Synthetic ShareGlass demo: embedded JavaScript ran.'\);) >>
+endobj
+7 0 obj
+<< /Type /Annot /Subtype /Link /Rect [72 600 360 625] /Border [0 0 1] /C [0 0.5 1] /A << /S /URI /URI (https://tracking.example.test/open?id=contract-8842) >> >>
+endobj
+8 0 obj
+<< /Type /Filespec /F (internal-notes.txt) /UF (internal-notes.txt) /EF << /F 9 0 R >> >>
+endobj
+9 0 obj
+<< /Type /EmbeddedFile /Subtype /text#2Fplain /Length 57 >>
+stream
+Internal note: customer account 8842; do not distribute.
+endstream
+endobj
+10 0 obj
+<< /Fields [] /NeedAppearances true >>
+endobj
+11 0 obj
+<< /Author (Avery Example) /Creator (Northwind Example Generator 4.2) /Producer (Northwind Example PDF Engine) /Title (Customer 8842 confidential agreement) /Subject (Internal negotiation draft) /Keywords (confidential, customer-8842, legal) /CreationDate (D:20260815184411+09'00') >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000015 00000 n 
+0000000169 00000 n 
+0000000226 00000 n 
+0000000368 00000 n 
+0000000617 00000 n 
+0000000687 00000 n 
+0000000797 00000 n 
+0000000974 00000 n 
+0000001079 00000 n 
+0000001228 00000 n 
+0000001283 00000 n 
+trailer
+<< /Size 12 /Root 1 0 R /Info 11 0 R >>
+startxref
+1584
+%%EOF

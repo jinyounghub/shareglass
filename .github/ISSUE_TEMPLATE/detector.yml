@@ -1,0 +1,36 @@
+name: Detector request
+about: Propose one explainable file indicator
+labels: [enhancement, detector]
+body:
+  - type: input
+    id: indicator
+    attributes:
+      label: Indicator
+      placeholder: DOCX external data connection in ...
+    validations:
+      required: true
+  - type: dropdown
+    id: format
+    attributes:
+      label: File format
+      options: [JPEG, PNG, WebP, DOCX, XLSX, PPTX, PDF, New format]
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: Why does this matter before sharing?
+    validations:
+      required: true
+  - type: textarea
+    id: location
+    attributes:
+      label: Exact container part, tag, or byte structure
+    validations:
+      required: true
+  - type: textarea
+    id: fixture
+    attributes:
+      label: Synthetic fixture plan
+    validations:
+      required: true
