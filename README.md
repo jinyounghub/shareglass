@@ -13,13 +13,17 @@
 
 <p align="center">
   <a href="https://jinyounghub.github.io/shareglass/"><strong>Live demo</strong></a> ·
+  <a href="https://github.com/jinyounghub/shareglass/stargazers"><strong>★ Star</strong></a> ·
   <a href="docs/README.ko.md">한국어</a> ·
   <a href="#command-line">CLI</a> ·
+  <a href="ROADMAP.md">Roadmap</a> ·
   <a href="SECURITY.md">Security</a>
 </p>
 
 <p align="center">
-  <img alt="CI" src="https://github.com/jinyounghub/shareglass/actions/workflows/ci.yml/badge.svg">
+  <a href="https://github.com/jinyounghub/shareglass/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jinyounghub/shareglass/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://www.npmjs.com/package/@jin0/shareglass"><img alt="npm version" src="https://img.shields.io/npm/v/@jin0/shareglass?color=73f0cc"></a>
+  <a href="https://github.com/jinyounghub/shareglass/releases/latest"><img alt="GitHub release" src="https://img.shields.io/github/v/release/jinyounghub/shareglass?color=48cce8"></a>
   <img alt="License MIT" src="https://img.shields.io/badge/license-MIT-73f0cc">
   <img alt="Zero runtime dependencies" src="https://img.shields.io/badge/runtime_dependencies-0-73f0cc">
   <img alt="Local first" src="https://img.shields.io/badge/files-local_only-73f0cc">
@@ -29,14 +33,19 @@
 
 A résumé, contract, spreadsheet, slide deck, or photo can disclose much more than its visible content. ShareGlass opens the file structure locally and explains identities, precise location, collaboration history, external connections, active content, and provenance signals before the file leaves your device.
 
-## Try it in 20 seconds
+## Try a risky file in one click
 
-1. Open the [live demo](https://jinyounghub.github.io/shareglass/).
-2. Click **Try a private résumé**.
-3. Open a finding to see the evidence and exact package path.
-4. Select the safe-copy actions and click **Create & verify safe copy**.
+No file handy? Open a synthetic sample directly—nothing is uploaded.
 
-The included demo files are synthetic. They deliberately contain fictional metadata and risky structures.
+| Demo | Deliberately contains | Open |
+|---|---|---|
+| Private résumé | author/company identity, reviewer comments, tracked revisions, an external template | [Inspect the résumé →](https://jinyounghub.github.io/shareglass/?sample=private-resume.docx) |
+| Geotagged image | precise GPS coordinates, device/software identity, image metadata | [Inspect the photo →](https://jinyounghub.github.io/shareglass/?sample=private-photo.png) |
+| Active PDF | JavaScript/actions, an attachment, document metadata, external URLs | [Inspect the PDF →](https://jinyounghub.github.io/shareglass/?sample=risky-contract.pdf) |
+
+Open a finding to see the evidence and exact package path. For supported formats, select the safe-copy actions and click **Create & verify safe copy**. The included files contain only fictional data.
+
+> Found something you did not expect? [Star ShareGlass](https://github.com/jinyounghub/shareglass) so more people remember to inspect a file before sending it.
 
 ## What it finds
 
@@ -51,6 +60,16 @@ The included demo files are synthetic. They deliberately contain fictional metad
 | PDF | document info, XMP, URLs, JavaScript/actions, attachments/rich media, forms, encryption, signatures, incremental updates, C2PA markers | Inspection only in v1 |
 
 ShareGlass reports structural indicators. It does not claim to prove that a file is harmless, anonymous, or malware-free. See the [threat model](docs/THREAT_MODEL.md).
+
+## More than a metadata stripper
+
+| A basic metadata remover | ShareGlass |
+|---|---|
+| Deletes a fixed set of fields | Explains identity, location, collaboration, external-link, active-content, and provenance findings |
+| Usually targets photos only | Inspects images, Office packages, and PDFs in one local workflow |
+| Assumes cleaning succeeded | Re-scans every supported safe copy and compares a content fingerprint |
+| May overwrite or silently rewrite | Always creates a separate file and requires confirmation for destructive or signature-breaking actions |
+| Gives little evidence | Shows the exact container path and bounded evidence for every finding |
 
 ## Why local-first
 
@@ -179,7 +198,7 @@ src/core/
 └── report.js               JSON and Markdown output
 ```
 
-Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before adding a format or sanitizer. Small detector contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before adding a format or sanitizer. Small detector contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md), the [roadmap](ROADMAP.md), and the open issues.
 
 ## Privacy and security
 
@@ -192,7 +211,7 @@ For a suspected vulnerability, use GitHub's private vulnerability reporting inst
 
 ## Project status
 
-`v1.0.0` is a usable first release with browser and CLI inspection, image/OOXML safe-copy generation, synthetic fixtures, automated tests, a PWA shell, and a GitHub Pages deployment workflow. The roadmap is tracked through issues rather than promised in the README.
+`v1.0.0` is a usable first release with browser and CLI inspection, image/OOXML safe-copy generation, synthetic fixtures, automated tests, a PWA shell, and a GitHub Pages deployment workflow. See [ROADMAP.md](ROADMAP.md) and the open issues for scoped next steps.
 
 ## License
 

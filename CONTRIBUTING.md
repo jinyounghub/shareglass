@@ -1,6 +1,6 @@
 # Contributing
 
-Contributions that make one detector more accurate, add a safe synthetic fixture, improve an explanation, or tighten a parser bound are especially useful.
+Contributions that make one detector more accurate, add a safe synthetic fixture, improve an explanation, or tighten a parser bound are especially useful. See [ROADMAP.md](ROADMAP.md) and the open issues for scoped contribution ideas.
 
 ## Before opening a pull request
 

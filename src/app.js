@@ -4,6 +4,7 @@ import { categorySummary, reportToJson, reportToMarkdown } from './core/report.j
 import { escapeHtml, formatBytes, mimeFromExtension, safeFilename } from './core/utils.js';
 
 const $ = (selector) => document.querySelector(selector);
+const PROJECT_URL = 'https://github.com/jinyounghub/shareglass';
 const elements = {
   dropView: $('#drop-view'),
   loadingView: $('#loading-view'),
@@ -336,7 +337,10 @@ async function createSafeCopy() {
     elements.safeResult.innerHTML = `
       <strong>Safer copy created and scanned again</strong>
       <p>${result.verification.originalFindings} → ${result.verification.sanitizedFindings} actionable findings. ${escapeHtml(fingerprintText)}</p>
-      <a class="button primary" href="${state.safeUrl}" download="${escapeHtml(result.name)}">Download ${escapeHtml(result.name)}</a>
+      <div class="safe-result-actions">
+        <a class="button primary" href="${state.safeUrl}" download="${escapeHtml(result.name)}">Download ${escapeHtml(result.name)}</a>
+        <a class="button star-action" href="${PROJECT_URL}" target="_blank" rel="noopener noreferrer">★ Star ShareGlass</a>
+      </div>
       ${(result.warnings || []).map((warning) => `<p>⚠ ${escapeHtml(warning)}</p>`).join('')}
     `;
     elements.safeResult.hidden = false;
@@ -465,7 +469,25 @@ async function exportShareCard() {
   context.fillText('github.com/jinyounghub/shareglass', 840, 570);
 
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
-  downloadBlob('shareglass-report.png', blob, 'image/png');
+  if (!blob) throw new Error('The share card could not be generated.');
+  const file = new File([blob], 'shareglass-report.png', { type: 'image/png' });
+  const shareData = {
+    title: 'ShareGlass local privacy report',
+    text: 'I checked what a file reveals before sharing it — entirely in my browser.',
+    url: PROJECT_URL,
+    files: [file]
+  };
+  if (navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))) {
+    try {
+      await navigator.share(shareData);
+      toast('Share sheet opened.');
+      return;
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+    }
+  }
+  downloadBlob(file.name, blob, file.type);
+  toast('Share card downloaded.');
 }
 
 function handleFiles(fileList) {

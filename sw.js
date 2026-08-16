@@ -1,4 +1,4 @@
-const VERSION = 'shareglass-v1.0.0';
+const VERSION = 'shareglass-v1.0.0-star-readiness';
 const LOCAL_ASSETS = [
   './', './index.html', './app.css', './manifest.webmanifest',
   './assets/shareglass-mark.svg', './assets/icon-192.png', './assets/icon-512.png',
