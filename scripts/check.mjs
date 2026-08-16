@@ -6,7 +6,7 @@ import { SHAREGLASS_VERSION } from '../src/core/analyze.js';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const required = [
-  'index.html', 'app.css', 'manifest.webmanifest', 'sw.js', 'README.md', 'LICENSE',
+  'index.html', 'app.css', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', 'sw.js', 'README.md', 'ROADMAP.md', 'LICENSE',
   'PRIVACY.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'CITATION.cff', '.gitattributes',
   'assets/shareglass-mark.svg', 'assets/icon-192.png', 'assets/icon-512.png',
   'assets/social-card.png', 'assets/demo-report.png',
@@ -40,6 +40,9 @@ for (const id of ['file-input', 'drop-zone', 'report-view', 'create-safe-copy', 
   if (!html.includes(`id="${id}"`)) throw new Error(`Missing required UI element #${id}`);
 }
 if (!html.includes("default-src 'self'")) throw new Error('The web app must retain a restrictive Content Security Policy.');
+if (!html.includes('rel="canonical" href="https://jinyounghub.github.io/shareglass/"')) {
+  throw new Error('The public web app must retain its canonical URL.');
+}
 
 const localHtmlReferences = [...html.matchAll(/\b(?:href|src)="([^"]+)"/g)]
   .map((match) => match[1])

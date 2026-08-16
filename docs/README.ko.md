@@ -6,7 +6,13 @@ ShareGlass는 이미지·Microsoft Office 문서·PDF 내부에 남아 있는 �
 
 ## 바로 체험하기
 
-GitHub Pages에서 **Try a private résumé**, **Try a geotagged image**, **Try an active PDF** 중 하나를 누르면 실제 개인정보가 아닌 합성 샘플로 전체 과정을 확인할 수 있습니다.
+파일을 준비하지 않아도 다음 합성 샘플을 한 번에 열 수 있습니다.
+
+- [개인정보와 댓글이 남은 이력서 검사](https://jinyounghub.github.io/shareglass/?sample=private-resume.docx)
+- [GPS 위치가 포함된 이미지 검사](https://jinyounghub.github.io/shareglass/?sample=private-photo.png)
+- [JavaScript와 첨부파일이 포함된 PDF 검사](https://jinyounghub.github.io/shareglass/?sample=risky-contract.pdf)
+
+세 샘플에는 실제 개인정보가 아닌 가상 정보만 들어 있습니다.
 
 1. 파일 또는 샘플을 선택합니다.
 2. 위험 점수와 발견 항목을 확인합니다.
@@ -58,3 +64,8 @@ npm run build
 ShareGlass 웹앱에는 파일 업로드 엔드포인트, 사용자 계정, 분석 도구가 없습니다. 선택형 C2PA 검증 버튼을 누를 때에만 공식 브라우저 SDK와 WASM 파일을 CDN에서 불러오며, 선택한 파일 자체는 ShareGlass가 전송하지 않습니다. 완전한 오프라인 환경에서는 해당 SDK 자산을 직접 호스팅하거나 C2PA 검증을 사용하지 않으면 됩니다.
 
 자세한 내용은 루트의 `PRIVACY.md`, `SECURITY.md`와 `docs/THREAT_MODEL.md`를 확인하세요.
+
+
+## 프로젝트 참여
+
+검사 결과에서 예상하지 못한 정보가 발견됐다면 [GitHub 저장소에 Star](https://github.com/jinyounghub/shareglass)를 남겨 다른 사용자도 프로젝트를 찾을 수 있게 도와주세요. 구현 방향과 기여 가능한 작업은 루트의 `ROADMAP.md`, `CONTRIBUTING.md`와 공개 이슈에서 확인할 수 있습니다.
