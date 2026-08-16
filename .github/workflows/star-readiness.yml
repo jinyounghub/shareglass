@@ -1,0 +1,49 @@
+name: Apply star-readiness patch
+
+on:
+  push:
+    branches:
+      - agent/star-readiness
+
+permissions:
+  contents: write
+
+concurrency:
+  group: star-readiness
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: ${{ hashFiles('.github/star-readiness.patch.part-*') != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: agent/star-readiness
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Apply verified patch
+        shell: bash
+        run: |
+          cat .github/star-readiness.patch.part-* > /tmp/star-readiness.patch
+          git apply --check /tmp/star-readiness.patch
+          git apply /tmp/star-readiness.patch
+          rm .github/star-readiness.patch.part-*
+          rm .github/workflows/star-readiness.yml
+      - name: Validate
+        run: |
+          npm ci
+          npm run ci
+          npm audit --omit=dev
+          git diff --check
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: improve discovery and result sharing"
+          git push origin HEAD:agent/star-readiness

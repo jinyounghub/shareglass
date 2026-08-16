@@ -1,0 +1,98 @@
+ var(--muted); font-size: 10px; margin: 5px 0 10px; }
+ .safe-result .button { display: inline-flex; text-decoration: none; }
++.safe-result-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+ .unsupported-copy { padding: 13px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); font-size: 10px; }
+ 
+ .provenance-panel { display: grid; grid-template-columns: 43px 1fr; column-gap: 10px; }
+@@ -215,7 +218,7 @@ main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+ .steps-grid h3 { margin: 78px 0 8px; font-size: 16px; }
+ .steps-grid p { margin: 0; color: var(--muted); font-size: 12px; }
+ 
+-.formats-section { padding-bottom: 120px; }
++.formats-section { padding-bottom: 10px; }
+ .format-table { border: 1px solid var(--line); border-radius: 17px; overflow: hidden; }
+ .format-row { display: grid; grid-template-columns: 1fr .7fr .8fr 2.2fr; gap: 15px; align-items: center; min-height: 66px; padding: 13px 18px; border-bottom: 1px solid var(--line); font-size: 12px; }
+ .format-row:last-child { border-bottom: 0; }.format-row.heading { min-height: 42px; color: var(--faint); font-family: var(--mono); font-size: 8px; text-transform: uppercase; letter-spacing: .1em; background: rgba(255,255,255,.02); }
+@@ -223,6 +226,17 @@ main { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+ .format-row .yes { color: var(--green); }.format-row .partial { color: var(--amber); }.format-row .inspect { color: var(--cyan); }
+ .limit-note { max-width: 900px; margin: 16px 0 0; color: var(--faint); font-size: 11px; }
+ 
++.faq-section { padding: 128px 0 120px; }
++.faq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
++.faq-grid details { border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.018); overflow: hidden; }
++.faq-grid summary { list-style: none; cursor: pointer; padding: 20px 52px 20px 20px; position: relative; font-weight: 720; font-size: 14px; line-height: 1.45; }
++.faq-grid summary::-webkit-details-marker { display: none; }
++.faq-grid summary::after { content: '+'; position: absolute; right: 20px; top: 17px; color: var(--mint); font: 700 20px var(--mono); transition: transform .18s ease; }
++.faq-grid details[open] summary::after { transform: rotate(45deg); }
++.faq-grid details[open] summary { border-bottom: 1px solid var(--line); }
++.faq-grid p { margin: 0; padding: 16px 20px 20px; color: var(--muted); font-size: 12px; line-height: 1.7; }
++.noscript { width: min(1180px, calc(100% - 40px)); margin: 18px auto; padding: 12px 15px; border: 1px solid rgba(255,191,91,.25); border-radius: 10px; color: #ffd99a; background: rgba(255,191,91,.06); font-size: 12px; }
++
+ footer { width: min(1180px, calc(100% - 40px)); margin: 0 auto; min-height: 100px; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 22px; color: var(--faint); font-size: 11px; }
+ footer p { flex: 1; } footer a { color: var(--cyan); text-decoration: none; }
+ .toast { position: fixed; right: 22px; bottom: 22px; max-width: 380px; z-index: 20; padding: 12px 15px; border: 1px solid var(--line-strong); border-radius: 11px; background: #15253a; box-shadow: var(--shadow); color: var(--text); font-size: 11px; animation: toast-in .22s ease-out; }
+@@ -235,6 +249,7 @@ footer p { flex: 1; } footer a { color: var(--cyan); text-decoration: none; }
+   .summary-strip { grid-template-columns: repeat(3, 1fr); }
+   .summary-item { border-bottom: 1px solid var(--line); }
+   .steps-grid { grid-template-columns: repeat(2, 1fr); }
++  .faq-grid { grid-template-columns: 1fr; }
+   .format-row { grid-template-columns: 1.2fr .7fr .8fr; }
+   .format-row > :last-child { grid-column: 1 / -1; }
+   .format-row.heading > :last-child { display: none; }
+diff --git a/docs/README.ko.md b/docs/README.ko.md
+index 6b98efb..d3b0558 100644
+--- a/docs/README.ko.md
++++ b/docs/README.ko.md
+@@ -6,7 +6,13 @@ ShareGlass는 이미지·Microsoft Office 문서·PDF 내부에 남아 있는 
+ 
+ ## 바로 체험하기
+ 
+-GitHub Pages에서 **Try a private résumé**, **Try a geotagged image**, **Try an active PDF** 중 하나를 누르면 실제 개인정보가 아닌 합성 샘플로 전체 과정을 확인할 수 있습니다.
++파일을 준비하지 않아도 다음 합성 샘플을 한 번에 열 수 있습니다.
++
++- [개인정보와 댓글이 남은 이력서 검사](https://jinyounghub.github.io/shareglass/?sample=private-resume.docx)
++- [GPS 위치가 포함된 이미지 검사](https://jinyounghub.github.io/shareglass/?sample=private-photo.png)
++- [JavaScript와 첨부파일이 포함된 PDF 검사](https://jinyounghub.github.io/shareglass/?sample=risky-contract.pdf)
++
++세 샘플에는 실제 개인정보가 아닌 가상 정보만 들어 있습니다.
+ 
+ 1. 파일 또는 샘플을 선택합니다.
+ 2. 위험 점수와 발견 항목을 확인합니다.
+@@ -58,3 +64,8 @@ npm run build
+ ShareGlass 웹앱에는 파일 업로드 엔드포인트, 사용자 계정, 분석 도구가 없습니다. 선택형 C2PA 검증 버튼을 누를 때에만 공식 브라우저 SDK와 WASM 파일을 CDN에서 불러오며, 선택한 파일 자체는 ShareGlass가 전송하지 않습니다. 완전한 오프라인 환경에서는 해당 SDK 자산을 직접 호스팅하거나 C2PA 검증을 사용하지 않으면 됩니다.
+ 
+ 자세한 내용은 루트의 `PRIVACY.md`, `SECURITY.md`와 `docs/THREAT_MODEL.md`를 확인하세요.
++
++
++## 프로젝트 참여
++
++검사 결과에서 예상하지 못한 정보가 발견됐다면 [GitHub 저장소에 Star](https://github.com/jinyounghub/shareglass)를 남겨 다른 사용자도 프로젝트를 찾을 수 있게 도와주세요. 구현 방향과 기여 가능한 작업은 루트의 `ROADMAP.md`, `CONTRIBUTING.md`와 공개 이슈에서 확인할 수 있습니다.
+diff --git a/index.html b/index.html
+index 9583dd6..5d46f67 100644
+--- a/index.html
++++ b/index.html
+@@ -7,16 +7,34 @@
+   <meta name="theme-color" content="#08111f">
+   <meta name="color-scheme" content="dark light">
+   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
++  <link rel="canonical" href="https://jinyounghub.github.io/shareglass/">
++  <link rel="sitemap" type="application/xml" href="sitemap.xml">
++  <meta property="og:site_name" content="ShareGlass">
+   <meta property="og:title" content="ShareGlass — See what your files reveal">
+-  <meta property="og:description" content="A local-first privacy and provenance inspector for Office documents, PDFs, and images.">
++  <meta property="og:description" content="Inspect hidden personal data, GPS, comments, external links, active content, and provenance locally before sharing a file.">
+   <meta property="og:type" content="website">
+-  <meta property="og:image" content="assets/social-card.png">
++  <meta property="og:url" content="https://jinyounghub.github.io/shareglass/">
++  <meta property="og:image" content="https://jinyounghub.github.io/shareglass/assets/social-card.png">
++  <meta property="og:image:width" content="1200">
++  <meta property="og:image:height" content="630">
++  <meta property="og:image:alt" content="ShareGlass local file privacy inspector report">
++  <meta name="twitter:card" content="summary_large_image">
++  <meta name="twitter:title" content="ShareGlass — See what your files reveal">
++  <meta name="twitter:description" content="Inspect Office documents, PDFs, and images locally before you share them.">
++  <meta name="twitter:image" content="https://jinyounghub.github.io/shareglass/assets/social-card.png">
+   <link rel="icon" href="assets/shareglass-mark.svg" type="image/svg+xml">
+   <link rel="manifest" href="manifest.webmanifest">
+   <link rel="stylesheet" href="app.css">
+   <title>ShareGlass — S

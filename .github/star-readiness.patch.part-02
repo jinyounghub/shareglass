@@ -1,0 +1,125 @@
+ee what your files reveal</title>
+ </head>
+-<body>
++<body itemscope itemtype="https://schema.org/WebApplication">
++  <meta itemprop="name" content="ShareGlass">
++  <meta itemprop="applicationCategory" content="SecurityApplication">
++  <meta itemprop="operatingSystem" content="Any modern web browser; Node.js 22+ for CLI">
++  <meta itemprop="isAccessibleForFree" content="true">
++  <link itemprop="url" href="https://jinyounghub.github.io/shareglass/">
++  <link itemprop="codeRepository" href="https://github.com/jinyounghub/shareglass">
++  <link itemprop="license" href="https://github.com/jinyounghub/shareglass/blob/main/LICENSE">
+   <div class="ambient ambient-one"></div>
+   <div class="ambient ambient-two"></div>
+   <header class="site-header">
+@@ -28,7 +46,8 @@
+     <nav aria-label="Primary navigation">
+       <a href="#how-it-works">How it works</a>
+       <a href="#support">Formats</a>
+-      <a class="github-link" href="https://github.com/jinyounghub/shareglass" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
++      <a href="#faq">FAQ</a>
++      <a class="github-link" href="https://github.com/jinyounghub/shareglass" target="_blank" rel="noopener noreferrer">★ Star on GitHub <span aria-hidden="true">↗</span></a>
+     </nav>
+   </header>
+ 
+@@ -106,7 +125,8 @@
+           <div class="action-spacer"></div>
+           <button id="export-json" class="button ghost" type="button">JSON report</button>
+           <button id="export-markdown" class="button ghost" type="button">Markdown</button>
+-          <button id="share-card" class="button ghost" type="button">Share card</button>
++          <button id="share-card" class="button ghost" type="button">Share result</button>
++          <a class="button star-action" href="https://github.com/jinyounghub/shareglass" target="_blank" rel="noopener noreferrer">★ Star</a>
+         </div>
+ 
+         <div class="report-grid">
+@@ -171,14 +191,37 @@
+       </div>
+       <p class="limit-note">PDF rewriting is intentionally disabled in v1: preserving xref tables, signatures, forms, and rendered output safely requires a dedicated rewrite engine. ShareGlass reports the risk instead of pretending a byte replacement is safe.</p>
+     </section>
++
++    <section id="faq" class="faq-section" itemscope itemtype="https://schema.org/FAQPage">
++      <div class="section-intro"><span class="eyebrow plain">Frequently asked</span><h2>Questions people ask before sending a file.</h2></div>
++      <div class="faq-grid">
++        <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
++          <summary itemprop="name">How do I remove personal information from a Word document?</summary>
++          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text">Inspect the DOCX first, choose the supported author, comment, thumbnail, custom-data, or external-link actions, then create a separate safe copy. ShareGlass scans that copy again and never overwrites the original.</p></div>
++        </details>
++        <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
++          <summary itemprop="name">Can a photo reveal where it was taken?</summary>
++          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text">Yes. JPEG, PNG, and WebP files can contain EXIF or XMP location and device data. ShareGlass identifies supported GPS metadata locally and can create a metadata-cleaned derivative.</p></div>
++        </details>
++        <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
++          <summary itemprop="name">Does ShareGlass upload my document or photo?</summary>
++          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text">No. Inspection and supported safe-copy operations run in the current browser tab. There is no file-upload endpoint, account system, analytics script, or telemetry.</p></div>
++        </details>
++        <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
++          <summary itemprop="name">Does a clean report prove a file is safe?</summary>
++          <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"><p itemprop="text">No. ShareGlass reports the structures it knows how to inspect. It is not an antivirus scanner and does not promise anonymity, harmlessness, or complete metadata removal for every file format.</p></div>
++        </details>
++      </div>
++    </section>
+   </main>
+ 
+   <footer>
+     <div class="brand"><img src="assets/shareglass-mark.svg" alt="" width="28" height="28"><span>ShareGlass</span></div>
+     <p>Open source · MIT licensed · No telemetry · Built for files you are about to send.</p>
+-    <a href="https://github.com/jinyounghub/shareglass" rel="noreferrer">View source ↗</a>
++    <a href="https://github.com/jinyounghub/shareglass" target="_blank" rel="noopener noreferrer">★ Star ShareGlass ↗</a>
+   </footer>
+ 
++  <noscript><p class="noscript">ShareGlass needs JavaScript to inspect files locally. No file is uploaded.</p></noscript>
+   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+   <canvas id="share-canvas" width="1200" height="630" hidden></canvas>
+   <script type="module" src="src/app.js"></script>
+diff --git a/scripts/build.mjs b/scripts/build.mjs
+index a29ae48..825ab40 100644
+--- a/scripts/build.mjs
++++ b/scripts/build.mjs
+@@ -8,7 +8,7 @@ const dist = resolve(root, 'dist');
+ await rm(dist, { recursive: true, force: true });
+ await mkdir(dist, { recursive: true });
+ 
+-for (const path of ['index.html', 'app.css', 'manifest.webmanifest', 'sw.js', 'assets', 'src', 'samples']) {
++for (const path of ['index.html', 'app.css', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', 'sw.js', 'assets', 'src', 'samples']) {
+   await cp(resolve(root, path), resolve(dist, path), { recursive: true });
+ }
+ 
+diff --git a/scripts/check.mjs b/scripts/check.mjs
+index 917a3dd..aa873ff 100644
+--- a/scripts/check.mjs
++++ b/scripts/check.mjs
+@@ -6,7 +6,7 @@ import { SHAREGLASS_VERSION } from '../src/core/analyze.js';
+ 
+ const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
+ const required = [
+-  'index.html', 'app.css', 'manifest.webmanifest', 'sw.js', 'README.md', 'LICENSE',
++  'index.html', 'app.css', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', 'sw.js', 'README.md', 'ROADMAP.md', 'LICENSE',
+   'PRIVACY.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'CITATION.cff', '.gitattributes',
+   'assets/shareglass-mark.svg', 'assets/icon-192.png', 'assets/icon-512.png',
+  'assets/social-card.png', 'assets/demo-report.png',
+ @@ -40,6 +40,9 @@ for (const id of ['file-input', 'drop-zone', 'report-view', 'create-safe-copy',
+   if (!html.includes(`id="${id}"`)) throw new Error(`Missing required UI element #${id}`);
+ }
+ if (!html.includes("default-src 'self'")) throw new Error('The web app must retain a restrictive Content Security Policy.');
++if (!html.includes('rel="canonical" href="https://jinyounghub.github.io/shareglass/"')) {
++  throw new Error('The public web app must retain its canonical URL.');
++}
+ 
+ const localHtmlReferences = [...html.matchAll(/\b(?:href|src)="([^"]+)"/g)]
+   .map((match) => match[1])
+diff --git a/src/app.js b/src/app.js
+index 54a06c0..94a458c 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -4,6 +4,7 @@ import { categorySummary, reportToJson, reportToMarkdown } from './core/report.j
+ import { escapeHtml, formatBytes, mimeFromExtension, safeFilename } from './core/utils.js';
+ 
+ const $ = (selector) => document.querySelector(selector);
++const PROJECT_URL = 'https://github.com/jinyounghub/shareglass';
+ const elements = {
+   dropView: $('#drop-view'),
+   loadingView: $('#loading-view'),
+@@ -336,7 +337,10 @@ async function createSafeCopy() {
+     elements.safeResult.innerHTML = `
+       <strong>Safer copy created and scanned again</strong>
+       <p>${result.verifica
