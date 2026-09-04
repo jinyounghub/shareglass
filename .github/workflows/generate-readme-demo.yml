@@ -1,18 +1,16 @@
-name: Generate README demo
+name: Finalize README demo
 
 on:
   push:
     branches: [codex/issue-4-readme-demo]
     paths:
-      - scripts/record-readme-demo.mjs
       - .github/workflows/generate-readme-demo.yml
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  generate:
+  finalize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -20,36 +18,66 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Update README
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('README.md')
+          text = path.read_text()
+
+          old_visual = '![ShareGlass report showing hidden identity, comments, external links, and revisions](assets/demo-report.png)'
+          new_visual = '''<p align="center">
+            <img src="assets/privacy-reveal.gif" width="1000" alt="ShareGlass locally inspecting a fictional résumé, revealing hidden identity and collaboration data, then creating and verifying a safer copy">
+          </p>
+
+          <p align="center">
+            <sub>Recorded from the repository's fictional résumé fixture. <a href="assets/demo-report.png">View the static report image</a>.</sub>
+          </p>'''
+
+          old_requirement = 'Requirements: Node.js 22 or newer. The repository deliberately has no runtime or development dependencies.'
+          new_requirement = 'Requirements: Node.js 22 or newer. The production core has zero runtime dependencies. Playwright is used only for browser smoke tests and README demo capture.'
+
+          old_commands = '''npm run samples   # regenerate synthetic fixtures
+          npm run check     # syntax and repository integrity checks
+          npm test          # core, sanitizer, fixture, and CLI tests
+          npm run build     # create the static dist directory
+          npm run ci        # run everything used by GitHub Actions'''
+          new_commands = '''npm run samples        # regenerate synthetic fixtures
+          npm run check          # syntax and repository integrity checks
+          npm test               # core, sanitizer, fixture, and CLI tests
+          npm run test:browser   # run Chromium smoke tests
+          npm run build          # create the static dist directory
+          npm run demo:readme    # rebuild and record the README demo
+          npm run ci             # run core checks used by GitHub Actions'''
+
+          replacements = [
+              (old_visual, new_visual),
+              (old_requirement, new_requirement),
+              (old_commands, new_commands),
+          ]
+          for old, new in replacements:
+              if text.count(old) != 1:
+                  raise SystemExit(f'Expected exactly one README match: {old[:60]!r}')
+              text = text.replace(old, new)
+
+          note = '''
+
+          The README demo command uses only `samples/private-resume.docx`, checks that the capture stays local, and writes `assets/privacy-reveal.gif`. Install Chromium with `npx playwright install chromium` and make sure `ffmpeg` is available before running it.
+          '''
+          marker = '\nArchitecture:\n'
+          if text.count(marker) != 1:
+              raise SystemExit('Expected one Architecture marker')
+          text = text.replace(marker, note + marker)
+          path.write_text(text)
+          PY
       - run: npm ci --offline --no-audit --no-fund
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-      - name: Install GIF encoder
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-      - run: npm run build
-      - name: Record and encode README demo
-        run: node scripts/record-readme-demo.mjs
-      - name: Show asset metadata
-        run: |
-          file assets/privacy-reveal.gif
-          du -h assets/privacy-reveal.gif
-          cat tmp/readme-demo/manifest.json
-      - name: Commit generated README demo
+      - run: npm run ci
+      - name: Commit final README demo changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/privacy-reveal.gif
-          git commit -m "docs: add generated README privacy demo"
+          git rm .github/workflows/generate-readme-demo.yml
+          git add README.md package.json scripts/check.mjs scripts/record-readme-demo.mjs assets/privacy-reveal.gif
+          git commit -m "docs: present the local privacy reveal in README"
           git push
-      - name: Upload README demo and source frames
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: shareglass-readme-demo
-          path: |
-            assets/privacy-reveal.gif
-            tmp/readme-demo/*.png
-            tmp/readme-demo/timeline.ffconcat
-            tmp/readme-demo/manifest.json
-          if-no-files-found: warn
