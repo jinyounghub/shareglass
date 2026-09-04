@@ -10,6 +10,18 @@ Contributions that make one detector more accurate, add a safe synthetic fixture
 4. Add a regression test for every detector or sanitizer change.
 5. Run `npm run ci`.
 
+## Browser smoke tests
+
+The browser suite builds `dist/`, serves it only on localhost, and exercises the repository-owned synthetic samples in Chromium.
+
+```sh
+npm ci
+npx playwright install chromium
+npm run test:browser
+```
+
+On a fresh Linux environment, use `npx playwright install --with-deps chromium` to install the required system libraries as well.
+
 ## Finding requirements
 
 A new finding should have:
