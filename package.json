@@ -21,6 +21,7 @@
     "samples": "node scripts/make-samples.mjs",
     "check": "node scripts/check.mjs",
     "test": "node --test",
+    "test:browser": "playwright test",
     "build": "node scripts/build.mjs",
     "ci": "npm run check && npm test && npm run build",
     "serve": "python3 -m http.server 4173"
@@ -49,6 +50,9 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
   },
   "publishConfig": {
     "access": "public",

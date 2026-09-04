@@ -12,6 +12,7 @@ const required = [
   'assets/social-card.png', 'assets/demo-report.png',
   'src/app.js', 'src/core/analyze.js', 'bin/shareglass.mjs',
   'samples/private-photo.png', 'samples/private-resume.docx', 'samples/risky-contract.pdf',
+  'playwright.config.js', 'browser-tests/samples.spec.js',
   '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml',
   '.github/workflows/release.yml', '.github/CODEOWNERS',
   'docs/README.ko.md', 'docs/THREAT_MODEL.md', 'docs/SAFE_COPY.md', 'docs/LAUNCH.md'
@@ -68,6 +69,9 @@ if (packageJson.name !== '@jin0/shareglass') throw new Error('Unexpected npm pac
 if (packageJson.version !== SHAREGLASS_VERSION) throw new Error('package.json and app version are out of sync.');
 if (packageLock.name !== packageJson.name || packageLock.version !== packageJson.version) {
   throw new Error('package-lock.json is out of sync with package.json.');
+}
+if (packageJson.devDependencies?.['@playwright/test'] !== packageLock.packages?.['node_modules/@playwright/test']?.version) {
+  throw new Error('The Playwright dependency and lockfile version are out of sync.');
 }
 if (packageJson.engines?.node !== '>=22') throw new Error('Supported Node.js engine declaration changed unexpectedly.');
 
