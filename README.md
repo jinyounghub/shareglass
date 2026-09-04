@@ -29,7 +29,13 @@
   <img alt="Local first" src="https://img.shields.io/badge/files-local_only-73f0cc">
 </p>
 
-![ShareGlass report showing hidden identity, comments, external links, and revisions](assets/demo-report.png)
+<p align="center">
+  <img src="assets/privacy-reveal.gif" width="1000" alt="ShareGlass locally inspecting a fictional résumé, revealing hidden identity and collaboration data, then creating and verifying a safer copy">
+</p>
+
+<p align="center">
+  <sub>Recorded from the repository's fictional résumé fixture. <a href="assets/demo-report.png">View the static report image</a>.</sub>
+</p>
 
 A résumé, contract, spreadsheet, slide deck, or photo can disclose much more than its visible content. ShareGlass opens the file structure locally and explains identities, precise location, collaboration history, external connections, active content, and provenance signals before the file leaves your device.
 
@@ -175,15 +181,20 @@ The detector catalog and known limitations are documented in [docs/DETECTORS.md]
 
 ## Development
 
-Requirements: Node.js 22 or newer. The repository deliberately has no runtime or development dependencies.
+Requirements: Node.js 22 or newer. The production core has zero runtime dependencies. Playwright is used only for browser smoke tests and README demo capture.
 
 ```bash
-npm run samples   # regenerate synthetic fixtures
-npm run check     # syntax and repository integrity checks
-npm test          # core, sanitizer, fixture, and CLI tests
-npm run build     # create the static dist directory
-npm run ci        # run everything used by GitHub Actions
+npm run samples        # regenerate synthetic fixtures
+npm run check          # syntax and repository integrity checks
+npm test               # core, sanitizer, fixture, and CLI tests
+npm run test:browser   # run Chromium smoke tests
+npm run build          # create the static dist directory
+npm run demo:readme    # rebuild and record the README demo
+npm run ci             # run core checks used by GitHub Actions
 ```
+
+
+The README demo command uses only `samples/private-resume.docx`, checks that the capture stays local, and writes `assets/privacy-reveal.gif`. Install Chromium with `npx playwright install chromium` and make sure `ffmpeg` is available before running it.
 
 Architecture:
 
