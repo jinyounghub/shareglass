@@ -1,0 +1,43 @@
+name: Generate README demo
+
+on:
+  push:
+    branches: [codex/issue-4-readme-demo]
+    paths:
+      - scripts/record-readme-demo.mjs
+      - .github/workflows/generate-readme-demo.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Record and encode README demo
+        run: node scripts/record-readme-demo.mjs
+      - name: Show asset metadata
+        run: |
+          file assets/privacy-reveal.gif
+          du -h assets/privacy-reveal.gif
+          cat tmp/readme-demo/manifest.json
+      - name: Upload README demo and source frames
+        uses: actions/upload-artifact@v7
+        with:
+          name: shareglass-readme-demo
+          path: |
+            assets/privacy-reveal.gif
+            tmp/readme-demo/*.png
+            tmp/readme-demo/timeline.ffconcat
+            tmp/readme-demo/manifest.json
+          if-no-files-found: error
