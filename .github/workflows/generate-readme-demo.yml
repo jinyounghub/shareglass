@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
+      - run: npm ci --offline --no-audit --no-fund
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - run: npm run build
@@ -32,6 +32,7 @@ jobs:
           du -h assets/privacy-reveal.gif
           cat tmp/readme-demo/manifest.json
       - name: Upload README demo and source frames
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: shareglass-readme-demo
@@ -40,4 +41,4 @@ jobs:
             tmp/readme-demo/*.png
             tmp/readme-demo/timeline.ffconcat
             tmp/readme-demo/manifest.json
-          if-no-files-found: error
+          if-no-files-found: warn
