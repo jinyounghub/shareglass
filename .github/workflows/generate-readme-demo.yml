@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate:
@@ -23,6 +23,10 @@ jobs:
       - run: npm ci --offline --no-audit --no-fund
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      - name: Install GIF encoder
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
       - run: npm run build
       - name: Record and encode README demo
         run: node scripts/record-readme-demo.mjs
@@ -31,6 +35,13 @@ jobs:
           file assets/privacy-reveal.gif
           du -h assets/privacy-reveal.gif
           cat tmp/readme-demo/manifest.json
+      - name: Commit generated README demo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/privacy-reveal.gif
+          git commit -m "docs: add generated README privacy demo"
+          git push
       - name: Upload README demo and source frames
         if: always()
         uses: actions/upload-artifact@v7
