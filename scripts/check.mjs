@@ -1,4 +1,4 @@
-import { access, readdir, readFile } from 'node:fs/promises';
+import { access, readdir, readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -9,10 +9,10 @@ const required = [
   'index.html', 'app.css', 'manifest.webmanifest', 'robots.txt', 'sitemap.xml', 'sw.js', 'README.md', 'ROADMAP.md', 'LICENSE',
   'PRIVACY.md', 'SECURITY.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md', 'CITATION.cff', '.gitattributes',
   'assets/shareglass-mark.svg', 'assets/icon-192.png', 'assets/icon-512.png',
-  'assets/social-card.png', 'assets/demo-report.png',
+  'assets/social-card.png', 'assets/demo-report.png', 'assets/privacy-reveal.gif',
   'src/app.js', 'src/core/analyze.js', 'bin/shareglass.mjs',
   'samples/private-photo.png', 'samples/private-resume.docx', 'samples/risky-contract.pdf',
-  'playwright.config.js', 'browser-tests/samples.spec.js',
+  'playwright.config.js', 'browser-tests/samples.spec.js', 'scripts/record-readme-demo.mjs',
   '.github/workflows/ci.yml', '.github/workflows/pages.yml', '.github/workflows/codeql.yml',
   '.github/workflows/release.yml', '.github/CODEOWNERS',
   'docs/README.ko.md', 'docs/THREAT_MODEL.md', 'docs/SAFE_COPY.md', 'docs/LAUNCH.md'
@@ -35,6 +35,16 @@ for (const file of modules) {
   const check = spawnSync(process.execPath, ['--check', file], { encoding: 'utf8' });
   if (check.status !== 0) throw new Error(check.stderr || `Syntax check failed: ${file}`);
 }
+
+const readme = await readFile(resolve(root, 'README.md'), 'utf8');
+if (!readme.includes('assets/privacy-reveal.gif')) throw new Error('README must show the animated local privacy demo.');
+if (!readme.includes('assets/demo-report.png')) throw new Error('README must retain the static report fallback.');
+const demoPath = resolve(root, 'assets/privacy-reveal.gif');
+const demoBytes = await readFile(demoPath);
+const demoHeader = demoBytes.subarray(0, 6).toString('ascii');
+if (!['GIF87a', 'GIF89a'].includes(demoHeader)) throw new Error('README demo is not a valid GIF asset.');
+const demoStat = await stat(demoPath);
+if (demoStat.size > 4 * 1024 * 1024) throw new Error('README demo must remain at or below 4 MiB.');
 
 const html = await readFile(resolve(root, 'index.html'), 'utf8');
 for (const id of ['file-input', 'drop-zone', 'report-view', 'create-safe-copy', 'share-canvas']) {
