@@ -226,7 +226,7 @@ try {
 
   await page.locator('#safe-result').waitFor({ state: 'visible' });
   const safeText = await page.locator('#safe-result').innerText();
-  if (!/19\s*→\s*5 actionable findings/.test(safeText)) throw new Error(`Unexpected safe-copy summary: ${safeText}`);
+  if (!/19\s*→\s*6 actionable findings/.test(safeText)) throw new Error(`Unexpected safe-copy summary: ${safeText}`);
   if (!/content fingerprint is unchanged/i.test(safeText)) throw new Error('The safe-copy result did not confirm the unchanged content fingerprint.');
   await alignTop(page.locator('#safe-result'), 90);
   await hidePointer();
